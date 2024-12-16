@@ -34,7 +34,6 @@ export class AppComponent {
   totalCount: number = 0;
   reservedCount: number = 0;
   availableCount: number = 0;
-  ratio: number = 0;
   lots: Lot[] = [];
   levels: Level[] = [];
   constructor(private http: HttpClient) {
@@ -48,10 +47,9 @@ export class AppComponent {
     this.http.get<Level[]>('https://emblematik.azurewebsites.net/api/GetData?code=1eR1wLNuTpIx6j-X8fPHMQ48MJuxO_mpIhu7xwYbGiD3AzFuS0SHnQ%3D%3D').subscribe(data => {
       this.levels = data;
       this.lots = data.flatMap(a => a.programs.flatMap(p => p.lots));
-      this.totalCount = data.length;
+      this.totalCount = this.lots.length;
       this.reservedCount = this.lots.filter(x => x.isReserved).length;
       this.availableCount = this.lots.filter(x => !x.isReserved).length
-      this.ratio = this.reservedCount / this.totalCount;
     });
   }
 
