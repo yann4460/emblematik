@@ -45,8 +45,7 @@ export class AppComponent {
   }
 
   load() {
-    this.http.get<Level[]>('http://localhost:7057/api/GetData').subscribe(data => {
-      // this.http.get<Lot[]>('https://emblematik.azurewebsites.net/api/GetData?code=1eR1wLNuTpIx6j-X8fPHMQ48MJuxO_mpIhu7xwYbGiD3AzFuS0SHnQ%3D%3D').subscribe(data => {
+    this.http.get<Level[]>('https://emblematik.azurewebsites.net/api/GetData?code=1eR1wLNuTpIx6j-X8fPHMQ48MJuxO_mpIhu7xwYbGiD3AzFuS0SHnQ%3D%3D').subscribe(data => {
       this.levels = data;
       this.lots = data.flatMap(a => a.programs.flatMap(p => p.lots));
       this.totalCount = data.length;
