@@ -2,8 +2,16 @@ import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { Observable } from 'rxjs';
 
+interface Level {
+  level: number;
+  programs: Programm[];
+}
+
+interface Programm {
+  name: string;
+  lots: Lot[];
+}
 
 interface Lot {
   number: number;
@@ -13,6 +21,7 @@ interface Lot {
   isReserved: boolean;
 }
 
+
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet, CommonModule],
@@ -21,21 +30,31 @@ interface Lot {
 })
 export class AppComponent {
   title = 'emblematik';
-  data$: Observable<Lot[]>;
+  programs: Programm[] = [];
+  totalCount: number = 0;
+  reservedCount: number = 0;
+  availableCount: number = 0;
+  ratio: number = 0;
+  lots: Lot[] = [];
+  levels: Level[] = [];
   constructor(private http: HttpClient) {
-    this.data$ = this.http.get<Lot[]>(`https://emblematik.azurewebsites.net/api/GetData?code=1eR1wLNuTpIx6j-X8fPHMQ48MJuxO_mpIhu7xwYbGiD3AzFuS0SHnQ%3D%3D`, {
-    });
   }
 
   ngOnInit() {
+    this.load();
   }
 
   load() {
-    this.http.get<Lot[]>('https://emblematik.azurewebsites.net/api/GetData?code=1eR1wLNuTpIx6j-X8fPHMQ48MJuxO_mpIhu7xwYbGiD3AzFuS0SHnQ%3D%3D').subscribe(data => {
-      const total = data.length;
-      const reserved = data.filter(x => x.isReserved).length;
-
+    this.http.get<Level[]>('http://localhost:7057/api/GetData').subscribe(data => {
+      // this.http.get<Lot[]>('https://emblematik.azurewebsites.net/api/GetData?code=1eR1wLNuTpIx6j-X8fPHMQ48MJuxO_mpIhu7xwYbGiD3AzFuS0SHnQ%3D%3D').subscribe(data => {
+      this.levels = data;
+      this.lots = data.flatMap(a => a.programs.flatMap(p => p.lots));
+      this.totalCount = data.length;
+      this.reservedCount = this.lots.filter(x => x.isReserved).length;
+      this.availableCount = this.lots.filter(x => !x.isReserved).length
+      this.ratio = this.reservedCount / this.totalCount;
     });
   }
+
 }
 

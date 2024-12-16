@@ -1,11 +1,42 @@
-<main class="main">
-  <div class="content">
-    <ul>
-      @for (lot of data$ | async ; track lot.number) {
-        <li>{{ lot.number }}</li>
-      }
-    </ul>
+<section class="pt-1 text-center container">
+  <div class="row py-lg-3">
+    <div class="col-lg-6 col-md-8 mx-auto">
+      <h1 class="fw-light">Emblématik</h1>
+      <p>Nombre total de lots: {{totalCount}}</p>
+      <div class="row">
+        <div class="col d-flex justify-content-between align-items-center">Reservés: {{reservedCount}} <small>{{(reservedCount/totalCount) | percent}}</small></div>
+        <div class="col d-flex justify-content-between align-items-center">Reservés: {{availableCount}} <small>{{(availableCount/totalCount) | percent}}</small></div>
+      </div>
+    </div>
   </div>
-</main>
-
+</section>
+<div class="album py-2 bg-body-tertiary">
+  <div class="container">
+    @for (level of levels; track level.level) {
+    <h5 class="py-2">Etage {{level.level}}</h5>
+    @for (program of level.programs; track program.name) {
+    <h6 class="py-1">Batiment {{program.name}}</h6>
+    <div class="row row-cols-3 row-cols-sm-4 row-cols-md-6 g-2">
+      @for (lot of program.lots; track lot.number) {
+      <div class="col">
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title">{{lot.number}}</h5>
+            <p class="card-text">{{lot.description}}</p>
+            <div class="d-flex justify-content-between align-items-center">
+              @if(lot.isReserved){
+              <span class="badge text-bg-secondary">Reservé</span>
+              }@else{
+              <span class="badge text-bg-success">Disponible</span>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+      }
+    </div>
+    }
+    }
+  </div>
+</div>
 <router-outlet />
