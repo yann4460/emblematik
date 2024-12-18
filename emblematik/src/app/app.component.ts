@@ -37,6 +37,7 @@ export class AppComponent {
   lots: Lot[] = [];
   levels: Level[] = [];
   loading: boolean = true;
+  percentage: Record<string, string> = {};
   constructor(private http: HttpClient) {
   }
 
@@ -53,8 +54,9 @@ export class AppComponent {
       this.reservedCount = this.lots.filter(x => x.isReserved).length;
       this.availableCount = this.lots.filter(x => !x.isReserved).length
       this.loading = false;
+      const percentageValue = this.reservedCount / this.totalCount * 100;
+      this.percentage = { 'width': percentageValue + '%' }
     });
   }
-
 }
 

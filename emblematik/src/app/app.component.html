@@ -2,10 +2,14 @@
   <div class="row py-1 py-lg-3">
     <div class="col-lg-6 col-md-8 mx-auto">
       <p>Nombre total de lots: {{totalCount}}</p>
-      <div class="row">
-        <div class="col d-flex justify-content-between align-items-center">Reservés: {{reservedCount}} <small class="badge rounded-pill text-bg-danger">{{(reservedCount/totalCount) | percent}}</small></div>
-        <div class="col d-flex justify-content-between align-items-center">Disponible: {{availableCount}} <small class="badge rounded-pill text-bg-success">{{(availableCount/totalCount) | percent}}</small></div>
+      <div class="row fw-light" style="font-size: 0.8em;">
+        <div class="col d-flex justify-content-between align-items-center">Reservés: {{reservedCount}}</div>
+        <div class="col d-flex justify-content-between align-items-center">Disponible: {{availableCount}}</div>
       </div>
+      <div class="progress">
+        <div class="progress-bar" role="progressbar" [ngStyle]="percentage" aria-valuemin="0" aria-valuemax="100">{{(reservedCount/totalCount) | percent}}</div>
+      </div>
+
     </div>
   </div>
 </section>
@@ -19,9 +23,9 @@
     </div>
     }
     @for (level of levels; track level.level) {
-    <h3 class="py-2 text-center">Etage {{level.level}}</h3>
+    <h3 class="text-center" style="font-variant: small-caps;">Etage {{level.level}}</h3>
     @for (program of level.programs; track program.name) {
-    <h6 class="py-1">Batiment {{program.name}}</h6>
+    <h6 class="pt-2">Batiment {{program.name}}</h6>
     <div class="row row-cols-4 row-cols-sm-4 row-cols-md-6 g-2">
       @for (lot of program.lots; track lot.number) {
       <div class="col">
@@ -29,13 +33,13 @@
           <div class="card-body p-2">
             <p class="card-title fw-bold">{{lot.number}}</p>
             <div class="fs-sm mb-1">{{lot.description}}</div>
-            <!-- <div class="d-flex justify-content-between align-items-center">
+            <div class="d-flex justify-content-between align-items-center">
               @if(lot.isReserved){
               <span class="badge text-bg-danger">Reservé</span>
               }@else{
               <span class="badge text-bg-success">Disponible</span>
               }
-            </div> -->
+            </div>
           </div>
         </div>
       </div>
